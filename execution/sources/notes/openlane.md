@@ -288,15 +288,31 @@ openlane projects
 
 **Design**
 
-1. Config.json - OpenLane Configuration File
+1. config.json - OpenLane Configuration File
 
 2. pin.cfg - Pin Configuration File
 
+    > This may affect subsequent static timing analysis, as it could introduce long paths.
+
 3. *.sdc - Synopsys Design Constraints File
 
-    Clock definition error → Chip cannot boot
-    Missing false path → Tool over-optimization causing critical path disruption
-    I/O delay deviation → Chip loses connection with the outside world
+    `pnr.sdc` vs `signoff.sdc`
+
+    `pnr.sdc` = guide optimization
+    - → Used during placement & routing optimization
+    - → Intentionally pessimistic to drive timing closure
+
+    `signoff.sdc` = reflect realitys
+    - → Used during final STA (signoff)
+    - → More realistic, closer to silicon conditions
+
+    > The PnR constraints file has **more aggressive** constraints than the signoff one, this is done to accommodate the gap between the optimization tool estimation of parasitics and the final extractions on the layout.
+
+    > Possible issues without SDC:
+    > Clock definition error → Chip cannot boot
+    > Missing false path → Tool over-optimization causing critical path disruption
+    > I/O delay deviation → Chip loses connection with the outside world
+
 
 4. src - Verilog/SystemVerilog/VHDL Sources
 
@@ -322,9 +338,30 @@ openlane projects
 
 </details>
 
+**Signoff**
+
+> The flow might be different (the number of steps might be different). Therefore, the step numbers listed in the table below are for reference only. What matters are the step names.
+
+1. drc
+    `Magic.DRC`: 62-magic-drc/reports/drc_violations.magic.rpt
+    `KLayout.DRC`: 63-klayout-drc/reports/drc_violations.klayout.json
+2. LVS
+    `Netgen.LVS`: 68-netgen-lvs/reports/lvs.netgen.rpt
+3. STA
+    `OpenROAD.STAPostPNR`: 54-openroad-stapostpnr/summary.rpt
+4. Antenna Check
+    `OpenROAD.CheckAntennas`: 45-openroad-checkantennas-1/reports/antenna_summary.rpt
+
+    > There are 2 OpenROAD.CheckAntennas steps. 
+    > One after OpenROAD.GlobalRouting 
+    > One after OpenROAD.DetailedRouting. 
+    > Focus on the second one, as this is the final antenna check.
+
 ---
 
 ### Violations
+
+> The final parameters runned by openlane is print to `{RUN_TAG}/resolved.json`.
 
 #### `OpenROAD.CheckAntennas`
 
@@ -391,17 +428,22 @@ openlane projects
 
 ---
 
+### Post-Layout
+
+By default, OpenLane places the automatically downloaded PDK in `~/.volare/volare/`.
+
+> gf180mcu
+> sky130
+
+---
+
 ### Issue
 
-<details>
-  <summary><strong>nix</strong></summary>
+1. Hold/Setup Worst Slack is extremly high.
 
-</details>
+    > make sure the "CLOCK_PORT" set in `config.json`, is corressponding to the actual clock port in the design.
 
-<details>
-  <summary><strong>docker</strong></summary>
-
-</details>
+2. 
 
 ---
 

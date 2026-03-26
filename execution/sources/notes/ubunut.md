@@ -1,4 +1,0 @@
----
-type: [note]
-tags: [EDA]
----
