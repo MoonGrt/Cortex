@@ -1,3 +1,8 @@
+---
+type: [note]
+tags: [git]
+---
+
 <div id="top"></div>
 
 ## 目录

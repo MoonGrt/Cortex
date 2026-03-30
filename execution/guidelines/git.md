@@ -1,3 +1,7 @@
+---
+type: [note]
+tags: [git]
+---
 
 ```
 git init
