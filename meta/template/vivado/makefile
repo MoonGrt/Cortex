@@ -14,9 +14,9 @@ $(error Unknown board - please specify a supported FPGA board)
 endif
 
 RTL_TOP = demo
-RTL_FILES = rtl/demo.v
+RTL_FILES = $(shell find rtl -type f -name "*.v")
 SIM_TOP = tb_demo
-SIM_FILES = sim/tb_demo.v
+SIM_FILES = $(shell find sim -type f -name "*.v")
 include ./scripts/vivado.mk
 
 ITER    ?= 5

@@ -1,0 +1,145 @@
+echo "Please replace with your Synopsys environment script in your environment"
+return 0
+
+setenv SYNOPSYS /net/cicsserver/usr5/synopsys/vP-2019
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                 Synopsys Synthesis Tools                         #
+ 
+set path = ( $path $SYNOPSYS/syn_vP-2019.03-SP3/syn/P-2019.03-SP3/bin .)
+
+# cp $SYNOPSYS/admin/setup/.synopsys_dc.setup ~/.synopsys_dc.setup #
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+#   core Tools  #
+ 
+set path = ($path $SYNOPSYS $SYNOPSYS/coreTools_vP-2019.06-SP1/coretools/P-2019.06-SP1/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                            customdesigner                            #    
+
+# set path = ($path $SYNOPSYS/customdesigner/J-2014.12/bin .)
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                      VCS  all                                           #
+
+setenv VCS_HOME /net/cicsserver/usr5/synopsys/vM-2017/vcs-mx/M-2017.03-SP2
+set path = ($path $VCS_HOME/bin /usr/bin .)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#           Freeware : CoreConsultant                                  #
+setenv CoreConsultant_HOME /net/cicsserver/usr5/synopsys/Freeware/CoreConsultant/Y-2006.03/linux/dware
+set path = ($path $CoreConsultant_HOME/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~# 
+#                    VCS 
+# set path = ($path  $SYNOPSYS/vcs/M-2017.03-SP2/bin .)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+# NanoSim, PowerMill,  TimeMill  &  Discovery AMS Simulation                  #
+
+# set path = ($path $SYNOPSYS/xa/J-2014.09/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                   MV tools .. mvgui                    #
+
+# set path = ($path  $SYNOPSYS/mvtools/I-2014.03-SP2/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                  Raphael                             #
+# set path = ($path  $SYNOPSYS/raphael/J-2014.09/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#              Sentaurus                               #
+
+# set path = ($path  $SYNOPSYS/pcm_studio/J-2014.06/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                  HSPICE                                           #
+
+# source /net/cicsserver/usr5/synopsys/vM-2017/hspice/M-2017.03-SP2/hspice/bin/cshrc.meta
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                  Formality                             #
+
+# set path = ($path $SYNOPSYS/fm/N-2017.09/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                   Primerail                             #
+
+# set path = ($path $SYNOPSYS/primerail/M-2017.06-SP2/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                   PrimeTime                            #
+
+# set path = ($path $SYNOPSYS/pts/M-2017.06-SP2/bin .)
+  set path = ($path /net/cicsserver/usr5/synopsys/vP-2019/pt_vP-2019.03-SP4/pts/P-2019.03-SP4/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                        NanoTime                                      #
+
+set path = ($path $SYNOPSYS/nt/M-2017.06-SP2/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+#  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                         icc  - Galaxy IC Compiler Tools           #
+
+set path = ($path $SYNOPSYS/icc/N-2017.09/bin .)
+#   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#              CosmosScope  & Waveview                    #
+
+setenv Scope $SYNOPSYS/cscope64/M-2017.06/ai_bin
+set path = ($Scope $path .)
+
+setenv Waveview $SYNOPSYS/custom_wv/wv/M-2017.03-SP2/bin
+set path = ($Waveview $path .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                  Verdi                                  #
+set path = ($path $SYNOPSYS/verdi/Verdi_M-2017.03-SP2/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                Laker                                    #
+# set path = ($path $SYNOPSYS/laker_v2014.06/bin .)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#                        Library Compiler                              #
+
+set path = ($path $SYNOPSYS/lc/M-2017.06-SP2/bin .)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+# License 
+setenv LM_LICENSE_FILE 27020@10.97.24.177
+setenv SNPSLMD_LICENSE_FILE 27020@10.97.24.177

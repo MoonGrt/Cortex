@@ -201,7 +201,10 @@ sim:
 		open_project $(BPREFIX).xpr
 		launch_simulation $(SIM_OPTS)
 		restart
+		open_vcd wave.vcd
+		log_vcd [get_objects -r *]
 		run all
+		close_vcd
 		exit
 	EOF
 	$(VIVADO) $(VIVADO_OPTS) -source $(WORK_DIR)/sim.tcl
