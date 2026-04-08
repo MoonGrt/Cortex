@@ -1,53 +1,72 @@
-# vcs.mk
+# make vcs-run SIM_MODE=post-layout SIM_TYPE=timing VCS_MODE=gui
 
-VCS_DIR := $(abspath $(BUILD_DIR))/$(PRJ_NAME)/vcs
+VCS       := vcs
+VCS_MODE  ?=
+VCS_DIR   := $(abspath $(BUILD_DIR))/$(PRJ_NAME)/vcs
+VCS_FLAGS := -full64 +vc +v2k -sverilog -debug_all +librescan
 
-# 创建 VCS_DIR
-$(VCS_DIR):
-	mkdir -p $(VCS_DIR)
-
-# 根据 SIM_MODE 和 SIM_TYPE 设置输入目录和 testbench
+VCS_TB_DIR := $(abspath $(PRJ_DIR))/sim
 ifeq ($(SIM_MODE),behavioral)
-    VCS_INPUT_DIR := $(OPENLANE_RTL_DIR)
-    TB := tb_demo
+    SIM_TYPE := functional
+    VCS_SRC_DIR := $(abspath $(PRJ_DIR))/rtl
 else ifeq ($(SIM_MODE),post-synthesis)
-    VCS_INPUT_DIR := $(OPENLANE_SYNTH_DIR)
-    ifeq ($(SIM_TYPE),functional)
-        TB := tb_demo
-    else ifeq ($(SIM_TYPE),timing)
-        TB := tb_demo_timing
-    endif
+    VCS_SRC_DIR := $(abspath $(OPENLANE_SYNTH_DIR))
+    VCS_LIB_DIR := $(abspath $(OPENLANE_LIBS_DIR))
+    VCS_SDF_FILE ?= $(abspath $(OPENLANE_LAYOUT_DIR)/sdf/max_ff_n40C_1v95/pm32__max_ff_n40C_1v95.sdf)
 else ifeq ($(SIM_MODE),post-layout)
-    VCS_INPUT_DIR := $(OPENLANE_LAYOUT_DIR)
-    ifeq ($(SIM_TYPE),functional)
-        TB := tb_demo
-    else ifeq ($(SIM_TYPE),timing)
-        TB := tb_demo_timing
-    endif
+    VCS_SRC_DIR := $(abspath $(OPENLANE_LAYOUT_DIR))
+    VCS_LIB_DIR := $(abspath $(OPENLANE_LIBS_DIR))
+    VCS_SDF_FILE ?= $(abspath $(OPENLANE_LAYOUT_DIR)/sdf/max_ff_n40C_1v95/pm32__max_ff_n40C_1v95.sdf)
 else
-    $(error Unknown SIM_MODE $(SIM_MODE))
+    $(error Unknown SIM_MODE $(SIM_MODE), supported modes: "behavioral" "post-synthesis" "post-layout")
 endif
 
-# file_list.f 路径
+VCS_DEFINES := +define+FUNCTIONAL +define+UNIT_DELAY=\#0
+ifeq ($(SIM_TYPE),functional)
+else ifeq ($(SIM_TYPE),timing)
+	VCS_FLAGS += +neg_tchk -negdelay -sdf max:$(RTL_TOP):$(VCS_SDF_FILE)
+else
+    $(error Unknown SIM_TYPE $(SIM_TYPE), supported types: "functional" "timing")
+endif
+
+ifeq ($(VCS_MODE),gui)
+    SIMV := simv -gui
+else
+    SIMV := simv
+endif
+
 FILE_LIST := $(VCS_DIR)/file_list.f
-
-# 自动生成 file_list.f
-$(FILE_LIST): $(VCS_DIR)
+filelist:
+	mkdir -p $(VCS_DIR)
 	@echo "Generating file list in $(FILE_LIST)"
-	@find $(VCS_INPUT_DIR) -name '*.v' > $(FILE_LIST)
+	@echo "Testbench: $(VCS_TB_DIR)"
+	@find $(VCS_TB_DIR) -name '*.v' > $(FILE_LIST)
+	@echo "Source: $(VCS_SRC_DIR)"
+	@find $(VCS_SRC_DIR) -name '*.v' >> $(FILE_LIST)
+ifneq ($(VCS_LIB_DIR),)
+	@echo "Library: $(VCS_LIB_DIR)"
+	@find $(VCS_LIB_DIR) -name '*.v' | sed '/\/primitives\.v$$/!s/^/-v /' >> $(FILE_LIST)
+endif
 
-# VCS 编译规则
-vcs: $(FILE_LIST)
-	@echo "SIM_MODE=$(SIM_MODE), SIM_TYPE=$(SIM_TYPE)"
-	@echo "Input directory: $(VCS_INPUT_DIR)"
-	@echo "Testbench: $(TB)"
-	# 使用 tcsh source synopsys_cshrc，并在 VCS_DIR 下生成所有中间文件
-	@tcsh -c "cd $(VCS_DIR); \
-	           source ../../scripts/synopsys_cshrc; \
-	           vcs -full64 -sverilog -debug_pp \
-	           -f $(FILE_LIST) \
-	           -top $(TB) \
-	           -o simv \
-	           -Mdir=$(VCS_DIR)/csrc"
-
+VCS_TARGET := $(VCS_DIR)/simv
+$(VCS_TARGET): filelist
+	@echo "\033[33m SIM_MODE = $(SIM_MODE), SIM_TYPE=$(SIM_TYPE)\033[0m"
+	tcsh -c "source scripts/synopsys_cshrc; \
+	          cd $(VCS_DIR); \
+	          $(VCS) $(VCS_FLAGS) $(VCS_DEFINES) \
+	            -top $(SIM_TOP) \
+	            -f $(FILE_LIST) \
+	            -l compile.log"
+vcs: $(VCS_TARGET)
 .PHONY: vcs
+
+vcs-run: $(VCS_TARGET)
+	@echo "\033[33m SIM_MODE = $(SIM_MODE), SIM_TYPE=$(SIM_TYPE)\033[0m"
+	tcsh -c "source scripts/synopsys_cshrc; \
+	          cd $(VCS_DIR); \
+	          $(SIMV)"
+.PHONY: vcs-run
+
+vcs-clean:
+	rm -rf $(VCS_DIR)
+.PHONY: vcs-clean

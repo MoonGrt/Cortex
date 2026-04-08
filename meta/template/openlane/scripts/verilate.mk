@@ -7,43 +7,41 @@ VERILATE_TARGET := $(VERILATE_DIR)/sim
 VERILATE_WAVE   := $(VERILATE_DIR)/wave.vcd
 
 ifeq ($(SIM_MODE), behavioral)
-VTOP ?= tb_demo
 VSRCS := $(shell find $(PRJ_DIR)/rtl -type f -name "*.v")
 else
 
-VSRCS := $(shell find $(OPENLANE_LIBS_DIR)/rtl -type f -name "*.v")
+VSRCS := $(shell find $(OPENLANE_LIBS_DIR) -type f -name "*.v")
 ifeq ($(SIM_MODE), post-synthesis)
-VSRCS += $(shell find $(OPENLANE_SYNTH_DIR)/rtl -type f -name "*.v")
+VSRCS += $(shell find $(OPENLANE_SYNTH_DIR) -type f -name "*.v")
 else ifeq ($(SIM_MODE), post-layout)
-VSRCS += $(shell find $(OPENLANE_LAYOUT_DIR)/rtl -type f -name "*.v")
+VSRCS += $(shell find $(OPENLANE_LAYOUT_DIR) -type f -name "*.v")
 else
 $(error Unknown SIM_MODE)
 endif
 
-$(error Unknown SIM_MODE)
 endif
 
 VSRCS += $(shell find $(PRJ_DIR)/sim -type f -name "*.v")
 CSRCS := $(shell find $(PRJ_DIR)/sim -type f -name "*.cpp")
 
 VBUILD := $(VERILATE_DIR)/obj_dir
-VLIB   := $(VBUILD)/libV$(VTOP).a
+VLIB   := $(VBUILD)/libV$(SIM_TOP).a
 VROOT  := /usr/local/share/verilator
 VINC   := -I$(VROOT)/include -I$(VROOT)/include/vltstd
 
 VERILATOR_ARGS := -Wno-fatal
 # VERILATOR_ARGS := -Wall
-$(VBUILD)/V$(VTOP).mk: $(VSRCS)
+$(VBUILD)/V$(SIM_TOP).mk: $(VSRCS)
 	@echo "---------------------- Verilator ----------------------"
 	mkdir -p $(dir $@)
-	$(VERILATOR) --timing --cc --trace --top-module $(VTOP) \
+	$(VERILATOR) --timing --cc --trace --top-module $(SIM_TOP) \
 		-DFUNCTIONAL -DUNIT_DELAY=\#0 \
 		$(VERILATOR_ARGS) \
 		-Mdir $(VBUILD) $(VSRCS) -j$(nproc)
-	$(MAKE) -C $(VBUILD) -f V$(VTOP).mk
+	$(MAKE) -C $(VBUILD) -f V$(SIM_TOP).mk
 
-$(VLIB): $(VBUILD)/V$(VTOP).mk
-	@$(MAKE) -C $(VBUILD) -f V$(VTOP).mk
+$(VLIB): $(VBUILD)/V$(SIM_TOP).mk
+	@$(MAKE) -C $(VBUILD) -f V$(SIM_TOP).mk
 	@ar rcs $@ $(VBUILD)/*.o
 
 $(VERILATE_TARGET): $(VLIB) $(CSRCS)
@@ -51,12 +49,13 @@ $(VERILATE_TARGET): $(VLIB) $(CSRCS)
 	@mkdir -p $(dir $@)
 	$(CXX) -I$(VBUILD) $(VINC) \
 		$(CSRCS) $(VLIB) -o $@
-verilate-sim: $(VERILATE_TARGET)
+verilate: $(VERILATE_TARGET)
 
 $(VERILATE_WAVE): $(VERILATE_TARGET)
 	@echo "\033[33m>>> Build SIM_MODE = $(SIM_MODE)\033[0m"
 	VERILATE_WAVE=$@ $(VERILATE_TARGET)
 verilate-run: $(VERILATE_WAVE)
+.PHONY: verilate-run
 
 verilate-wave: $(VERILATE_WAVE)
 	$(GTKWARE) $(VERILATE_WAVE) &

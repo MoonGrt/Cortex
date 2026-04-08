@@ -21,28 +21,29 @@ module tb_demo;
     );
 
     // clock
+    parameter T = 10;
     initial clk = 0;
     always #5 clk = ~clk;
-    // reference（改为 unsigned）
+    // reference
     reg [63:0] reference;
     task run_test(input [31:0] a, input [31:0] b);
     begin
-        @(posedge clk);
+        #T
         mc = a;
         mp = b;
-        reference = a * b;   // unsigned 乘法
+        reference = a * b;
 
         start = 1'b1;
-        @(posedge clk);
+        #T
         start = 1'b0;
+        #T
 
         wait(done == 1'b1);
-        @(posedge clk);
         if (p !== reference) begin
-            $display("[ERROR] mc=%0d mp=%0d => DUT=%0d REF=%0d",
+            $display("[FAID] mc=%0d mp=%0d => DUT=%0d REF=%0d",
                       mc, mp, p, reference);
         end else begin
-            $display("[PASS ] mc=%0d mp=%0d => %0d",
+            $display("[PASS] mc=%0d mp=%0d => %0d",
                       mc, mp, p);
         end
     end
@@ -55,11 +56,11 @@ module tb_demo;
         mc    = 0;
         mp    = 0;
 
-        repeat(5) @(posedge clk);
+        #T
         rst = 0;
 
         // ---------------------------
-        // Directed（全正数）
+        // Directed
         // ---------------------------
         run_test(32'd0, 32'd0);
         run_test(32'd1, 32'd1);
@@ -68,7 +69,7 @@ module tb_demo;
         run_test(32'h7fffffff, 32'd2);
 
         // ---------------------------
-        // Random（强制正数）
+        // Random
         // ---------------------------
         for (i = 0; i < 10; i = i + 1) begin
             run_test($random & 32'h7fffffff,
@@ -80,3 +81,5 @@ module tb_demo;
     end
 
 endmodule
+
+`default_nettype wire

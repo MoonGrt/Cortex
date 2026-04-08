@@ -4,6 +4,9 @@ ICD_DIR   := icd
 PRJ_NAME  := demo
 PRJ_DIR   := $(ICD_DIR)/$(PRJ_NAME)
 
+# top-level module
+SIM_TOP ?= tb_demo
+RTL_TOP ?= pm32
 # behavioral post-synthesis post-layout
 SIM_MODE ?= behavioral
 # functional timing
