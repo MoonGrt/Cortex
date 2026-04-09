@@ -3,6 +3,20 @@ type: [note]
 tags: [Ubuntu]
 ---
 
+**常用命令**
+
+```
+# 压缩
+tar -cvf archive.tar folder
+zip -r archive.zip folder
+# 解压
+tar -xvf archive.tar
+tar -xzvf archive.tar.gz
+tar -xjvf archive.tar.bz2
+tar -xJvf archive.tar.xz
+```
+
+
 ## Ubuntu 16.04
 
 ### Installation
@@ -72,7 +86,7 @@ git config --global user.email "1561145394@qq.com"
 # ccache 替换 gcc
 echo 'export PATH="/usr/lib/ccache:$PATH"' >> ~/.bashrc && source ~/.bashrc
 
-# VScode 设置: 
+# VScode 设置:
 # 按照插件: python, c/c++, wakatime, error lens, verilog, markdown, fitten
 # 打开 Cortex 安装推荐插件
 # 快捷键设置: 返回 前进
@@ -125,18 +139,25 @@ sudo poweroff
     > sudo gedit /var/lib/dpkg/status
     > 将 "Pacakge: python2" 改为 "Pacakge: python"
 
+
+    Uninstall Vivado
+    1、找到 Vivado 安装路径
+    2、在所在目录找到 .xinstall 该文件隐藏文件
+    3、输入命令: `sudo ./xsetup -Uninstall`
+    4、等待卸载完成后，删除 Vivado 安装路径
+
 4. clang14
 
     ```bash
-    # 1. **添加 LLVM 的官方 GPG key**: 
+    # 1. **添加 LLVM 的官方 GPG key**:
     wget https://apt.llvm.org/llvm-snapshot.gpg.key
     sudo apt-key add llvm-snapshot.gpg.key
-    # 2. **添加 LLVM 的 APT 源**: 
+    # 2. **添加 LLVM 的 APT 源**:
     sudo add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main"
-    # 3. **更新软件包列表并安装 clang-14**: 
+    # 3. **更新软件包列表并安装 clang-14**:
     sudo apt update
     sudo apt install clang-14 lldb-14 lld-14
-    # 4. **（可选）设置 `clang` 命令默认指向 clang-14**: 
+    # 4. **（可选）设置 `clang` 命令默认指向 clang-14**:
     sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 100
     sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-14 100
     ```
@@ -160,7 +181,7 @@ sudo poweroff
     ```
 
 6. modelsim
-  
+
 https://blog.csdn.net/weixin_43245577/article/details/140839616
 https://pan.baidu.com/s/1oNHvzMFh9pLcGAX1A3Dqjw?pwd=2301&_at_=1685846090578#list/path=%2F
 

@@ -1,6 +1,6 @@
 ---
 type: [note]
-tags: [EDA]
+tags: [EDA, verilator, yosys, openroad]
 ---
 
 ## OpenLane2
@@ -218,6 +218,7 @@ This tutorial is based on the [official documentation](https://openlane2.readthe
       python3 -m openlane --dockerized
       ```
       !!! - In docker, `~` is not the default user path, `/home/xxx` !!!
+      > Recommended: set the $HOME to the user's home directory, like `export HOME=/home/xxx`, right after entering the Docker shell.
 
   2. **Run & View**
 
@@ -269,6 +270,36 @@ flowchart LR
 8. **Post-PnR Analysis**: RC extraction (SPEF) + STA + IR drop report.
 9. **Physical Verification**: DRC / LVS / XOR checks.
 10. **Tapeout Outputs**: Generate GDS, LEF, netlists, SDF.
+
+---
+
+### Openlane parameters
+
+`openlane --help`
+
+```
+[nix-shell:~]$ openlane --help
+Usage: openlane [OPTIONS] [CONFIG_FILES] ...
+
+Copy final views:
+  --save-views-to DIRECTORY       A directory to copy the final views to, where
+                                  each format is saved under a directory named
+                                  after the corner ID (much like the 'final'
+                                  directory after running a flow.)
+
+Run options: [mutually exclusive]
+  --run-tag TEXT                  An optional name to use for this particular
+                                  run of an OpenLane-based flow. Used to create
+                                  the run directory.
+  --last-run                      Use the last run as the run tag.
+
+Other options:
+  -j, --jobs INTEGER              The maximum number of threads or processes
+                                  that can be used by OpenLane.  [default: 8]
+  --design-dir DIRECTORY          The top-level directory for your design that
+                                  configuration objects may resolve paths
+                                  relative to.
+```
 
 ---
 
@@ -443,7 +474,25 @@ By default, OpenLane places the automatically downloaded PDK in `~/.volare/volar
 
     > make sure the "CLOCK_PORT" set in `config.json`, is corressponding to the actual clock port in the design.
 
-2. 
+2. verilator post-synthesis simulation abnormal.
+
+    Try disable Verilator optimization, by add args `-O0`
+    > Slow down the compilation speed.
+
+3. nix-shell cannot find `xdot` command.
+
+    > shell.nix -> flake.nix
+
+    Search `devShells` - There is: `default`, `notebook`, `dev`, `docs`.
+    Referencing the `notebook` settings, add `xdot` to the default, like:
+    ```nix
+    default =
+      callPackage (self.createOpenLaneShell {
+        extra-packages = (with pkgs; [
+          xdot
+        ]);
+    }) {};
+    ```
 
 ---
 

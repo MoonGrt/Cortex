@@ -12,10 +12,11 @@ https://ruak.github.io/2026/01/23/CVA6-Ubuntu%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%BB%B
 0. Setup the environment variables for the number of jobs.
 ```sh
 # Set the number of jobs to use for compilation
-echo 'export CAV6_HOME=$HOME/cva6/cva6' >> ~/.bashrc && source ~/.bashrc
-echo 'export RISCV=$HOME/cva6/toolchain' >> ~/.bashrc && source ~/.bashrc
-echo 'export PATH="$HOME/cva6/toolchain/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+echo '# Set CVA6 environment variables' >> ~/.bashrc
 echo 'export NUM_JOBS=$(nproc)' >> ~/.bashrc && source ~/.bashrc
+echo 'export RISCV=$HOME/cva6_workbench/toolchain' >> ~/.bashrc && source ~/.bashrc
+echo 'export PATH="$HOME/cva6_workbench/toolchain/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+echo 'export CAV6_HOME=$HOME/cva6_workbench/cva6' >> ~/.bashrc && source ~/.bashrc
 # Prerequisites
 sudo apt-get update
 sudo apt-get install -y autoconf automake autotools-dev curl git libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool bc zlib1g-dev cmake help2man device-tree-compiler

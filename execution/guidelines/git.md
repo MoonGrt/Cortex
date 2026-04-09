@@ -3,6 +3,13 @@ type: [note]
 tags: [git]
 ---
 
+**常用命令**
+
+```
+git submodule update --init --recursive --remote
+```
+
+
 ```
 git init
 git remote add origin https://github.com/xxx/xxx.git
