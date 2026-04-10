@@ -1,4 +1,4 @@
-OPENLANE_DIR      := $(abspath $(BUILD_DIR))/$(PRJ_NAME)/openlane
+OPENLANE_DIR      := $(abspath $(PRJ_BUILD_DIR))/openlane
 OPENLANE_SAVE_DIR := $(abspath $(SAVE_DIR))/$(PRJ_NAME)
 
 OPENLANE_RUNS_DIR    := $(OPENLANE_DIR)/runs

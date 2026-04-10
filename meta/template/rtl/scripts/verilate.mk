@@ -2,12 +2,12 @@ VERILATOR := verilator
 GTKWARE   := gtkwave
 CXX       := g++
 
-VERILATE_DIR    := $(abspath $(BUILD_DIR))/$(PRJ_NAME)/verilate
-VERILATE_TARGET := $(VERILATE_DIR)/sim
-VERILATE_WAVE   := $(VERILATE_DIR)/wave.vcd
+VERILATE_DIR    := $(abspath $(PRJ_BUILD_DIR))/verilate
+VERILATE_TARGET := $(VERILATE_DIR)/$(PRJ_NAME)
+VERILATE_WAVE   := $(VERILATE_DIR)/$(PRJ_NAME).vcd
 
 ifeq ($(SIM_MODE), behavioral)
-VSRCS := $(shell find $(PRJ_DIR)/rtl -type f -name "*.v")
+VSRCS := $(RTL_FILES)
 else
 
 VSRCS := $(shell find $(OPENLANE_LIBS_DIR) -type f -name "*.v")
@@ -21,8 +21,8 @@ endif
 
 endif
 
-VSRCS += $(shell find $(PRJ_DIR)/sim -type f -name "*.v")
-CSRCS := $(shell find $(PRJ_DIR)/sim -type f -name "*.cpp")
+VSRCS += $(SIM_FILES)
+CSRCS := $(VERILATOR_EXE)
 
 VBUILD := $(VERILATE_DIR)/obj_dir
 VLIB   := $(VBUILD)/libV$(SIM_TOP).a
@@ -61,6 +61,6 @@ verilate-wave: $(VERILATE_WAVE)
 	$(GTKWARE) $(VERILATE_WAVE) &
 .PHONY: verilate-wave
 
-clean-verilate:
+verilate-clean:
 	rm -rf $(VERILATE_DIR)
-.PHONY: clean-verilate
+.PHONY: verilate-clean

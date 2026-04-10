@@ -38,7 +38,9 @@ module tb_demo;
         start = 1'b0;
         #T
 
-        wait(done == 1'b1);
+        while (done !== 1'b1) begin
+            @(posedge clk);
+        end
         if (p !== reference) begin
             $display("[FAID] mc=%0d mp=%0d => DUT=%0d REF=%0d",
                       mc, mp, p, reference);

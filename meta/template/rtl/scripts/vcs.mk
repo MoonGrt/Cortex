@@ -2,13 +2,13 @@
 
 VCS       := vcs
 VCS_MODE  ?=
-VCS_DIR   := $(abspath $(BUILD_DIR))/$(PRJ_NAME)/vcs
+VCS_DIR   := $(abspath $(PRJ_BUILD_DIR))/vcs
 VCS_FLAGS := -full64 +vc +v2k -sverilog -debug_all +librescan
 
-VCS_TB_DIR := $(abspath $(PRJ_DIR))/sim
+VCS_SIM_DIR := $(SIM_DIR)
 ifeq ($(SIM_MODE),behavioral)
     SIM_TYPE := functional
-    VCS_SRC_DIR := $(abspath $(PRJ_DIR))/rtl
+    VCS_SRC_DIR := $(RTL_DIR)
 else ifeq ($(SIM_MODE),post-synthesis)
     VCS_SRC_DIR := $(abspath $(OPENLANE_SYNTH_DIR))
     VCS_LIB_DIR := $(abspath $(OPENLANE_LIBS_DIR))
@@ -39,8 +39,8 @@ FILE_LIST := $(VCS_DIR)/file_list.f
 filelist:
 	mkdir -p $(VCS_DIR)
 	@echo "Generating file list in $(FILE_LIST)"
-	@echo "Testbench: $(VCS_TB_DIR)"
-	@find $(VCS_TB_DIR) -name '*.v' > $(FILE_LIST)
+	@echo "Testbench: $(VCS_SIM_DIR)"
+	@find $(VCS_SIM_DIR) -name '*.v' > $(FILE_LIST)
 	@echo "Source: $(VCS_SRC_DIR)"
 	@find $(VCS_SRC_DIR) -name '*.v' >> $(FILE_LIST)
 ifneq ($(VCS_LIB_DIR),)
