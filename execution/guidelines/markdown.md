@@ -1,6 +1,6 @@
 ---
 type: [note]
-tags: [git]
+tags: [git] [markdown]
 ---
 
 <div id="top"></div>

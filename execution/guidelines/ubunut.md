@@ -1,6 +1,6 @@
 ---
 type: [note]
-tags: [Ubuntu]
+tags: [Linux] [Ubuntu]
 ---
 
 **常用命令**
@@ -15,6 +15,9 @@ tar -xzvf archive.tar.gz
 tar -xjvf archive.tar.bz2
 tar -xJvf archive.tar.xz
 ```
+
+
+
 
 
 ## Ubuntu 16.04
@@ -193,6 +196,10 @@ https://pan.baidu.com/s/1oNHvzMFh9pLcGAX1A3Dqjw?pwd=2301&_at_=1685846090578#list
     echo 'eval "$(thefuck --alias)"' >> ~/.bashrc && source ~/.bashrc
     ```
 
+8. Ubuntu 22.04 安装 VCS + Verdi
+https://zhuanlan.zhihu.com/p/1899035861158454466
+激活`synopsys`: `lmg_synopsys`
+
 ### Setting
 
 1. github.com 连接设置
@@ -230,6 +237,22 @@ https://pan.baidu.com/s/1oNHvzMFh9pLcGAX1A3Dqjw?pwd=2301&_at_=1685846090578#list
 
 3. 调整 SWAP 分区容量
 
+    ```bash
+    # 1. 查看当前系统的swap大小
+    free -m
+    # 2. 关闭现有的swap分区: 将/etc/fstab文件中所有设置为swap的设备关闭，然后才能创建swap
+    sudo swapoff -a
+    # 3. 创建新的swap文件: bs×count=最后生成的swap大小，这里设置8G
+    sudo dd if=/dev/zero of=/swapfile bs=1G count=16
+    # 4. 设置权限: 出于安全原因，交换文件应该只能被root用户读写
+    sudo chmod 600 /swapfile
+    # 5. 并启用 swap
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    # 6. 设置swap永久有效: 编辑 /etc/fstab 最后添加: /swapfile swap swap sw 0 0
+    sudo nano /etc/fstab
+    ```
+
 4. [扩展虚拟机的磁盘空间](https://www.cnblogs.com/rusthx/articles/17854510.html)
 
     ```bash
@@ -247,6 +270,7 @@ https://pan.baidu.com/s/1oNHvzMFh9pLcGAX1A3Dqjw?pwd=2301&_at_=1685846090578#list
 
     ```bash
     echo '.host:/ /mnt/hgfs fuse.vmhgfs-fuse allow_other 0 0' | sudo tee -a /etc/fstab
+    mount -a
     ```
 
 2. VMware 无法粘贴复制
