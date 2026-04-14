@@ -1,6 +1,6 @@
 ---
 type: [note]
-tags: [RISCV, CVA6]
+tags: [RISCV] [CVA6]
 ---
 
 ## CVA6
@@ -13,7 +13,7 @@ https://ruak.github.io/2026/01/23/CVA6-Ubuntu%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%BB%B
 ```sh
 # Set the number of jobs to use for compilation
 echo '# Set CVA6 environment variables' >> ~/.bashrc
-echo 'export NUM_JOBS=$(nproc)' >> ~/.bashrc && source ~/.bashrc
+echo 'export NUM_JOBS=$(( $(nproc) * 2 / 3 ))' >> ~/.bashrc && source ~/.bashrc
 echo 'export RISCV=$HOME/cva6_workbench/toolchain' >> ~/.bashrc && source ~/.bashrc
 echo 'export PATH="$HOME/cva6_workbench/toolchain/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
 echo 'export CAV6_HOME=$HOME/cva6_workbench/cva6' >> ~/.bashrc && source ~/.bashrc

@@ -321,6 +321,16 @@ openlane projects
 
 1. config.json - OpenLane Configuration File
 
+    ```json
+    {
+      "DESIGN_NAME": "demo",
+      "VERILOG_FILES": ["dir::rtl/demo.v"],
+      "CLOCK_PERIOD": 25,
+      "CLOCK_PORT": "clk"
+    }
+    ```
+    "VERILOG_INCLUDE_DIRS" -> include directories for the design.
+
 2. pin.cfg - Pin Configuration File
 
     > This may affect subsequent static timing analysis, as it could introduce long paths.
